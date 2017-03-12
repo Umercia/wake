@@ -30,7 +30,7 @@ coef_directeur <- function(label_, y){
 
 lm_eqn <- function(df){
       # creation of the character string containing slope, offset and r2
-      # called in plot function to display öine equation on the plot
+      # called in plot function to display ?ine equation on the plot
       m <- lm(y ~ x, df)
       
       eq <- substitute(italic(y) == a + b %.% italic(x)*","~~italic(r)^2~"="~r2, 
@@ -88,7 +88,6 @@ mdl_1 <- function(x,a,x1,y1){
  
 ```{r data_processing, echo=FALSE, warning = FALSE, message = FALSE, cache = TRUE, results="hide"}
 
-#setwd("wake")
 
 wake <- read.csv("wake_input.csv")
 wake <- data.table(wake)
@@ -98,8 +97,6 @@ names(wake2) <- c("site","label","manufacturer", "turbine", "generator", "rotor"
 
 wake2$generator <- as.numeric(gsub(",","", wake2$generator))
 wake2$AEP <- as.numeric(gsub(",","", wake2$AEP))
-
-
 
 
 # for summary presentation, change some column into factor
@@ -128,13 +125,10 @@ To assess the impact of each parameters on wake efficiency, a reference configur
 
 
 
-All inputs and scripts can be found on this link: [Data and R script](https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2)
+All inputs and script can be found on this link: [Data and R script](https://github.com/Umercia/wake)
 
 
 ## Input Data & Processing
-
-
-
 
 Basic data processing has been done: It mainly consists of reading, subseting and parsing data. 
 Sample view of the input data after processing:
@@ -263,7 +257,7 @@ reference
  
 For each parameters, 4 graphics have been built, showing step by step how the model is build.
 
-1. vizualisation if the results
+1. vizualisation of the results
 2. model construction
 3. test of the model
 4. comparaison of the deviation with/without model
@@ -590,10 +584,10 @@ renderPlot({
 
 From the graphs above:
 
-* Generator: clear (good correlation factor) but relatively small impact on efficiency [].
+* Generator: Clear (good correlation factor) but relatively small impact on efficiency.
 * Rotor: No clear impact on the efficiency 
-* Hub_height: clear and relatively important impact on efficiency.
-* Wind speed: clear and relatively important impact on efficiency. 
+* Hub_height: Clear and relatively important impact on efficiency.
+* Wind speed: Clear and relatively important impact on efficiency. 
 
 It should be noted that wind speed and hub height are highly correlated.A change on the hub height will have off course an impact on the wind distribution. The core raison of the efficiency change might be more due to the change of wind distribution rather hub height. For the final model, We will chose then to use a correction for Wind speed and generator.
 assuming a reference where we have the efficiency, the wind speed, tower heitgh the wind shear.
