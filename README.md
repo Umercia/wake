@@ -13,3 +13,9 @@ multiple configurations have been computed using Winpro 3.1 with the standard wa
 To assess the impact of each parameters on wake efficiency, a reference configuration has been choosen (hub height + rotor + generator) and from this reference, each parameter has been tuned one by one (keeping the other constants).
 
 Results can be found on this link: [results](https://github.com/Umercia/wake)
+
+Main files:  
+* "Wake_study.Rmd": R script generating the results html page.
+* "wake_input.csv": data used to build the model.
+* "wake_benshmark.csv": data used to benshmark the model.
+
