@@ -41,6 +41,7 @@ lm_eqn <- function(df){
       as.character(as.expression(eq))
 }
 
+
 multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
       require(grid)
       
@@ -92,8 +93,29 @@ mdl_1 <- function(x,a,x1,y1){
 wake <- read.csv("wake_input.csv")
 wake <- data.table(wake)
 
-wake2 <- wake[,.(Site, Row.data.Description,Manufact., Type.generator, Power..rated, Rotor.diameter, Hub.height,Result,Efficiency, Free.mean.wind.speed,k..Sum.)]
-names(wake2) <- c("site","label","manufacturer", "turbine", "generator", "rotor", "hub_height","AEP","efficiency", "wind_speed", "k" )
+wake2 <- wake[,.(Site, 
+                 Row.data.Description,
+                 Manufact., 
+                 Type.generator, 
+                 Power..rated, 
+                 Rotor.diameter, 
+                 Hub.height,
+                 Result,
+                 Efficiency, 
+                 Free.mean.wind.speed,
+                 k..Sum.)]
+
+names(wake2) <- c("site",
+                  "label",
+                  "manufacturer", 
+                  "turbine", 
+                  "generator", 
+                  "rotor", 
+                  "hub_height",
+                  "AEP",
+                  "efficiency", 
+                  "wind_speed", 
+                  "k" )
 
 wake2$generator <- as.numeric(gsub(",","", wake2$generator))
 wake2$AEP <- as.numeric(gsub(",","", wake2$AEP))
@@ -156,9 +178,15 @@ Rotor goes from `r min(wake2$rotor)`m to `r max(wake2$rotor)`m, generator size f
       
       for(j in unique(wake2$site)){
       
-            reference[site == j, hub_height := as.numeric(names(sort(table(wake2[site == j, hub_height]),decreasing=TRUE)[1])) ]
-            reference[site == j, rotor := as.numeric(names(sort(table(wake2[site == j, rotor]),decreasing=TRUE)[1]))  ]
-            reference[site == j, generator := as.numeric(names(sort(table(wake2[site == j, generator]),decreasing=TRUE)[1]))  ]
+            reference[site == j, 
+                      hub_height := as.numeric(names(sort(table(wake2[site == j, hub_height]),
+                                                          decreasing=TRUE)[1])) ]
+            reference[site == j, 
+                      rotor := as.numeric(names(sort(table(wake2[site == j, rotor]),
+                                                     decreasing=TRUE)[1]))  ]
+            reference[site == j, 
+                      generator := as.numeric(names(sort(table(wake2[site == j, generator]),
+                                                         decreasing=TRUE)[1]))  ]
       
       } 
 
@@ -180,15 +208,15 @@ reference
       # 4 parameters are hub_height (tag h), wind speed (tag v), generator size (tag g) and rotor size (tag r).
 
       # --- sub plots efficiency versus hub height and wind speed
-      # wake2 <- wake2[!label %in% c("T8","T9","T11","T13","T14"),]   # TEMP
 
       sub_selection_h <- NULL
       for(j in unique(wake2$site)){
             
-            sub_selection_h <- rbind(sub_selection_h, wake2[    site == j & 
-                                                                      rotor == reference [site == j, rotor] &
-                                                                      generator == reference [site == j, generator]])
-            
+            sub_selection_h <- rbind(sub_selection_h, 
+                                     wake2[ site == j & 
+                                            rotor == reference[site == j, rotor] &
+                                            generator == reference[site == j, generator]
+                                            ])
       } 
       
       h <- ggplot(sub_selection_h, aes(x = hub_height, y = efficiency, group = factor(label))) +
@@ -199,48 +227,47 @@ reference
       h1 <- h + 
             geom_point(size = 4, pch = 21, aes(fill = site), alpha = .5) +
             geom_smooth(method="lm", se = FALSE, size = 1, aes(colour = site))
-            # + ggtitle("Plot.1 Linear fit")
       
       v <- ggplot(sub_selection_h, aes(x = wind_speed, y = efficiency, group = factor(label))) +
             theme(legend.position="top") +
             xlab("wind speed at hub height [m/s]") +
             ylab("wake efficiency [%]")
       
-      
       v1 <- v + 
             geom_point(size = 4, pch = 21, aes(fill = site), alpha = .5) +
             geom_smooth(method="lm", se = FALSE, size = 1, aes(colour = site))
-            # + ggtitle("Plot.1 Linear fit")
+
       
       # --- sub plot efficiency versus generator size
       sub_selection_g <- NULL
       for(j in unique(wake2$site)){
             
-            sub_selection_g <- rbind(sub_selection_g, wake2[    site == j & 
-                                                                  rotor == reference [site == j, rotor] &
-                                                                  hub_height == reference [site == j, hub_height]])
+            sub_selection_g <- rbind(sub_selection_g, 
+                                     wake2[ site == j & 
+                                            rotor == reference [site == j, rotor] &
+                                            hub_height == reference [site == j, hub_height]])
             
       } 
       
       g <- ggplot(sub_selection_g, aes(x = generator, y = efficiency, group = factor(label))) +
             theme(legend.position="top")+
-            xlab("generator size [MW]")+
+            xlab("generator size [kW]")+
             ylab("wake efficiency [%]")
       
       g1 <- g + 
             geom_point(size = 4, pch = 21, aes(fill = site), alpha = .5) +
             geom_smooth(method="lm", se = FALSE, size = 1, aes(colour = site))
-            # + ggtitle("Plot.1 Linear fit")
       
       
       # --- sub plot efficiency versus rotor size 
       sub_selection_r <- NULL
       for(j in unique(wake2$site)){
             
-            sub_selection_r <- rbind(sub_selection_r, wake2[    site == j & 
-                                                                      generator == reference [site == j, generator] &
-                                                                      hub_height == reference [site == j, hub_height]])
-            
+            sub_selection_r <- rbind(sub_selection_r, 
+                                     wake2[ site == j & 
+                                            generator == reference [site == j, generator] &
+                                            hub_height == reference [site == j, hub_height]
+                                            ])
       } 
       
       r <- ggplot(sub_selection_r, aes(x = rotor, y = efficiency, group = factor(label))) + 
@@ -251,7 +278,6 @@ reference
       r1 <- r + 
             geom_point(size = 4, pch = 21, aes(fill = site), alpha = .5) +
             geom_smooth(method="lm", se = FALSE, size = 1, aes(colour = site))
-            # + ggtitle("Plot.1 Linear fit")
 
 ``` 
  
@@ -287,7 +313,7 @@ For each parameters, 4 graphics have been built, showing step by step how the mo
             ylab("slope [%.s/m]") +
             theme(legend.position="top")
       
-      slope_vs <- abs(summary(lm( y ~ x , data = df))$coef[2])*sign(median(df$y))   # pour prendre en compte le signe origina de la pente
+      slope_vs <- abs(summary(lm( y ~ x , data = df))$coef[2])*sign(median(df$y)) #Same sign than the original slope 
       offset_vs <- summary(lm( y ~ x , data = df))$coef[1]
       corel_vs <- summary(lm( y ~ x , data = df))$r.squared
       
@@ -354,9 +380,10 @@ For each parameters, 4 graphics have been built, showing step by step how the mo
             xlab("wake efficiency [%]") +
             theme(legend.position="top")
       
-      slope_hs <- abs(summary(lm( y ~ x , data = df))$coef[2])*sign(median(df$y))   # pour prendre en compte le signe origina de la pente
+      slope_hs <- abs(summary(lm( y ~ x , data = df))$coef[2])*sign(median(df$y)) #Same sign than the original slope
       offset_hs <- summary(lm( y ~ x , data = df))$coef[1]
       corel_hs <- summary(lm( y ~ x , data = df))$r.squared
+      
       # add fitted lines (deducted by the model mdl_1) to the "h" plot
       h2 <- h +     
             geom_point(data =sub_selection_h[hub_height == 100], size = 4, pch = 21, aes(fill = site), alpha = .5)+
@@ -418,9 +445,10 @@ For each parameters, 4 graphics have been built, showing step by step how the mo
             xlab("wake efficiency [%]") +
             theme(legend.position="none")
       
-      slope_rs <- abs(summary(lm( y ~ x , data = df))$coef[2])*sign(median(df$y))   # pour prendre en compte le signe origina de la pente
+      slope_rs <- abs(summary(lm( y ~ x , data = df))$coef[2])*sign(median(df$y)) #Same sign than the original slope
       offset_rs <- summary(lm( y ~ x , data = df))$coef[1]
       corel_rs <- summary(lm( y ~ x , data = df))$r.squared
+      
       # add fitted lines (deducted by the model mdl_1) to the "r" plot
       r2 <- r +     
             geom_point(data =sub_selection_r[rotor == 117], size = 4, pch = 21, aes(fill = site), alpha = .5)+
@@ -479,7 +507,7 @@ For each parameters, 4 graphics have been built, showing step by step how the mo
             xlab("wake efficiency [%]") +
             theme(legend.position="none")
       
-      slope_gs <- abs(summary(lm( y ~ x , data = df))$coef[2])*sign(median(df$y))   # pour prendre en compte le signe origina de la pente
+      slope_gs <- abs(summary(lm( y ~ x , data = df))$coef[2])*sign(median(df$y)) #Same sign than the original slope
       offset_gs <- summary(lm( y ~ x , data = df))$coef[1]
       corel_gs <- summary(lm( y ~ x , data = df))$r.squared
       
@@ -589,45 +617,20 @@ From the graphs above:
 * Hub_height: Clear and relatively important impact on efficiency.
 * Wind speed: Clear and relatively important impact on efficiency. 
 
-It should be noted that wind speed and hub height are highly correlated.A change on the hub height will have off course an impact on the wind distribution. The core raison of the efficiency change might be more due to the change of wind distribution rather hub height. For the final model, We will chose then to use a correction for Wind speed and generator.
-assuming a reference where we have the efficiency, the wind speed, tower heitgh the wind shear.
+It should be noted that wind speed and hub height are highly correlated.A change on the hub height will have off course an impact on the wind distribution. The core raison of the efficiency change might be more due to the change of wind distribution rather hub height. For the final model, We will chose to use a correction for wind speed and generator.
 
-Based on those results we choose to retain the model for Wind speed and generator size.
 
-#### equation for wind speed correction:
-$$ Eff_2 = AS * (100 * Eff_1) * (WS_1 * (H_1/H_2)^{\alpha} - WS_1) + Eff_1 $$
-
+#### model_1 equation:
+$$ Eff_2 = A_x * (100 * Eff_1) * (X_2 - X_1) + Eff_1 $$
 
 $Eff_1$: reference efficiency [%]  
 $Eff_2$: target efficiency [%] (new configuration)  
-$WS_1$: reference wind speed [m/s]  
-$H_1$: reference hub height [m]  
-$H_2$: target hub height [m]  
-$\alpha$: reference wind shear  
-AS: slope from the wind speed model [s/m] (plot 2): `r round(slope_vs,4)`   
-
-
-#### equation for generator correction:
-$$ Eff_2 = AG * (100 * Eff_1) * (G_2 - G_1) + Eff_1 $$
-
-$Eff_1$: reference efficiency [%]  
-$Eff_2$: target efficiency [%] (new configuration)  
-$G_1$: reference generator size [MW]  
-$G_2$: target generator size [MW]  
-AG: slope from the generator model [1/MW] (plot 2):`r format(slope_gs, digits = 4, scientific= TRUE)`  
-
-#### model equation:
-$$ Eff_2 = A * (100 * Eff_1) * (G_2 - G_1) + Eff_1 $$
-
-$Eff_1$: reference efficiency [%]  
-$Eff_2$: target efficiency [%] (new configuration)  
-$G_1$: reference value of the considered parameter (rotor, generator, wind speed or hub_height) 
-$G_2$: target value of the considered parameter (rotor, generator, wind speed or hub_height)  
-$A_p$: slope from the model (take a specific value for each parameter)  
-Since we retain wind speed and generator for the model, we have:  
-* $A_generator$: `r format(slope_gs, digits = 4, scientific= TRUE)`  
-* $A_windspeed$: `r round(slope_vs,4)`  
-
+$X_1$: reference value of the considered parameter (~~rotor~~, generator [kW], wind speed [m/s] or ~~hub_height~~)  
+$X_2$: target value of the considered parameter (~~rotor~~, generator [kW], wind speed [m/s] or ~~hub_height~~)  
+$A_x$: slope from the model (take a specific value for each parameter x). According to the previous results, we have:  
+  
+* For generator  $A_g$: `r format(slope_gs, digits = 4, scientific= TRUE)` [1/kW]
+* For wind speed $A_w$: `r round(slope_vs,4)` [s/m]
 
 
 ## Model benchmark
@@ -640,31 +643,39 @@ wake_test <- data.table(wake_test)
 #shear_per_pad <- read.csv("shear_per_pad_test_sample.csv") 
 #shear_per_pad <- data.table(shear_per_pad) 
 
-wake_test <- wake_test[,.(Site,User.label,Manufact., Type.generator, Power..rated, Rotor.diameter, Hub.height,Result,Efficiency, Free.mean.wind.speed)]
-names(wake_test) <- c("site","label","manufacturer", "turbine", "generator", "rotor", "hub_height","AEP","efficiency", "wind_speed" )
+wake_test <- wake_test[,.(Site,User.label,Manufact., 
+                          Type.generator, 
+                          Power..rated, 
+                          Rotor.diameter, 
+                          Hub.height,
+                          Result,
+                          Efficiency, 
+                          Free.mean.wind.speed)]
+
+names(wake_test) <- c("site",
+                      "label",
+                      "manufacturer", 
+                      "turbine", 
+                      "generator", 
+                      "rotor", 
+                      "hub_height",
+                      "AEP",
+                      "efficiency", 
+                      "wind_speed" )
 
 wake_test$generator <- as.numeric(gsub(",","", wake_test$generator))
 wake_test$AEP <- as.numeric(gsub(",","", wake_test$AEP))
+
 
 # Reference table -------------------------------------------------------------------------------
 # refence table used to point the refence configuration (hub Height, generator, tower).
 
 wake_test[,configuration := paste(rotor,generator,hub_height,sep = "_")]
-#reference <- wake_test[1:length(unique(wake_test$label))]
 reference <- wake_test[configuration == "126_3450_120"] #choice of the reference scenario
-#wake_test <- wake_test[configuration == c("136_3600_140")]
-
-#slope_vs <- 0.205 #0.2697383
-#slope_gs <- -0.0001053545
-slope_rs <- 0 #we will not conside a correction with the rotor size parameter
-
-
-# model
-
+slope_rs <- 0 #set up to 0: we will not conside the rotor size parameter (low correlation factor)
 
 
 # ------- test rotor--> check diffence from real values and extrapolated ones (using mdl_1)
-#for (c in unique(wake_test$configuration)){
       for(j in unique(wake_test$label)){
             y1 <- reference[label == j, efficiency]
             
@@ -676,10 +687,6 @@ slope_rs <- 0 #we will not conside a correction with the rotor size parameter
             wake_test[label == j,
                             efficiency_r_no_model := y1]
             
-            
-            
-            
-            
             #generator correction
             x1 <- reference[label == j, generator]
             
@@ -688,11 +695,8 @@ slope_rs <- 0 #we will not conside a correction with the rotor size parameter
             wake_test[label == j,
                       efficiency_g_no_model := efficiency_r_model_1]
             
-            
-            
             #Wind_speed correction
             x1 <- reference[label == j, wind_speed]
-            
             #shear <- shear_per_pad[label == j,shear]
             #x2 <- x1*(wake_test[label == j, hub_height]/reference[label == j, hub_height])^shear
       
@@ -701,7 +705,6 @@ slope_rs <- 0 #we will not conside a correction with the rotor size parameter
             wake_test[label == j,
                       efficiency_v_no_model :=efficiency_g_model_1]
       }
-#}
 
 wake_test[,residual_r_model_1:= efficiency - efficiency_r_model_1]
 wake_test[,residual_r_no_model:= efficiency - efficiency_r_no_model]
@@ -772,7 +775,6 @@ ggplot(data = res[vestas_selection,], aes(x = model, y = residual, fill = model)
             legend.title=element_blank(),
             axis.ticks.x=element_blank() ) +
       ylab("error [%]")
-      #+ggtitle("Model benchmark")
 ```
  
 ```{r benchmark_plot_comp, echo = FALSE} 
@@ -792,7 +794,6 @@ ggplot(data = res[!grep(pattern = "^V",x = res$turbine),],
             legend.title = element_blank(),
             axis.ticks.x = element_blank() ) +
       ylab("error [%]")
-      #+ggtitle("Model benchmark")
 ```
 
 <script type="text/x-mathjax-config">   
