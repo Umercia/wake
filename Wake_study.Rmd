@@ -1,11 +1,17 @@
 ---
 title: "Wake efficiency correction"
 output: 
-    html_document:
-    mathjax: http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+  html_document:
+    mathjax: "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
 date: "february 26, 2017"
 runtime: shiny
 ---
+
+```{r setup, include=FALSE}
+library(codetools)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
 
 ```{r function, echo=FALSE, warning = FALSE, message = FALSE, cache = TRUE}
 
@@ -796,6 +802,3 @@ ggplot(data = res[!grep(pattern = "^V",x = res$turbine),],
       ylab("error [%]")
 ```
 
-<script type="text/x-mathjax-config">   
-   MathJax.Hub.Config({  "HTML-CSS": { minScaleAdjust: 125, availableFonts: [] }  });
-</script>
