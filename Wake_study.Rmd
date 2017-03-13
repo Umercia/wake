@@ -1,7 +1,7 @@
 ---
 title: "Wake efficiency correction"
 output: 
-  html_document:
+    html_document:
     mathjax: "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
 date: "february 26, 2017"
 runtime: shiny
@@ -139,7 +139,7 @@ parsed_data[,hub_height := as.factor(hub_height)]
 
 ## Synopsis
 
-In this study we investigate the impact of wind turbine type (rotor size, generator size and hub height) on the wake efficiency. The overall idea is to build a simple model that could be able to predict(/correct) the wake effect of a specific configuration (turbine type) based on another "refence" configuration. It should be noted that it is a "macro" approach that does not go into the details of the wake model equations.
+In this study we investigate the impact of wind turbine type (rotor size, generator size and hub height) on the wake efficiency. The overall idea is to build a simple model that could be able to predict(/correct) the wake effect of a specific configuration (turbine type) based on another "reference" configuration. It should be noted that it is a "macro" approach that does not go into the details of the wake model equations.
 4 turbine characteristics have been identified to have potentially an impact on the wake effect:
 
 * hub height
@@ -147,9 +147,9 @@ In this study we investigate the impact of wind turbine type (rotor size, genera
 * rotor size
 * generator size
 
-To build this model, `r length(unique(wake2$site))` sites of 17 WTGs have been selected around Northen Europe countries. On each site,
+To build this model, `r length(unique(wake2$site))` sites of 17 WTGs have been selected around Northern Europe countries. On each site,
 multiple configurations have been computed using Winpro 3.1 with the standard wake model (N.O Jense, WDC = 0.075). 
-To assess the impact of each parameters on wake efficiency, a reference configuration has been choosen (hub height + rotor + generator) and from this reference, each parameter has been tuned one by one (keeping the other constants).
+To assess the impact of each parameters on wake efficiency, a reference configuration has been chosen (hub height + rotor + generator) and from this reference, each parameter has been tuned one by one (keeping the other constants).
 
 
 
@@ -158,7 +158,7 @@ All inputs and script can be found on this link: [Data and R script](https://git
 
 ## Input Data & Processing
 
-Basic data processing has been done: It mainly consists of reading, subseting and parsing data. 
+Basic data processing has been done: It mainly consists of reading, subsetting and parsing data. 
 Sample view of the input data after processing:
 ```{r data_view, echo=FALSE, warning = FALSE, message = FALSE, cache = TRUE}
 parsed_data
@@ -292,7 +292,7 @@ For each parameters, 4 graphics have been built, showing step by step how the mo
 1. vizualisation of the results
 2. model construction
 3. test of the model
-4. comparaison of the deviation with/without model
+4. comparison of the deviation with/without model
 
 
 ```{r model and residual, echo=FALSE, warning = FALSE, message = FALSE, cache = TRUE,results = "hide"} 
@@ -591,7 +591,7 @@ renderPlot({
 }, width = 600, height = 400)
 ```
 
-Plot.3 shows the results of the model (dashed lines) using a refence point for each pad.
+Plot.3 shows the results of the model (dashed lines) using a reference point for each pad.
 ```{r echo = FALSE}
 renderPlot({ 
   d <- input$parameters
@@ -602,7 +602,7 @@ renderPlot({
 }, width = 600, height = 400)
 ```
 
-Plot.4 shows the comparaison of not using any model (assuming efficicency constant) versus using the above model.
+Plot.4 shows the comparison of not using any model (assuming efficiency constant) versus using the above model.
 ```{r echo = FALSE}
 renderPlot({ 
   d <- input$parameters
@@ -801,4 +801,8 @@ ggplot(data = res[!grep(pattern = "^V",x = res$turbine),],
             axis.ticks.x = element_blank() ) +
       ylab("error [%]")
 ```
+
+<script type="text/x-mathjax-config">   
+   MathJax.Hub.Config({  "HTML-CSS": { minScaleAdjust: 125, availableFonts: [] }  });
+</script>
 
