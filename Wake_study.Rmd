@@ -1,17 +1,15 @@
 ---
 title: "Wake efficiency correction"
-output: 
-    html_document:
-    mathjax: "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
 date: "february 26, 2017"
+output: html_document
 runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
+# codetools needed to publish
 library(codetools)
 knitr::opts_chunk$set(echo = FALSE)
 ```
-
 
 ```{r function, echo=FALSE, warning = FALSE, message = FALSE, cache = TRUE}
 
@@ -232,7 +230,7 @@ reference
       
       h1 <- h + 
             geom_point(size = 4, pch = 21, aes(fill = site), alpha = .5) +
-            geom_smooth(method="lm", se = FALSE, size = 1, aes(colour = site))
+            geom_smooth(method="lm", se = FALSE, size = 0.5, aes(colour = site))
       
       v <- ggplot(sub_selection_h, aes(x = wind_speed, y = efficiency, group = factor(label))) +
             theme(legend.position="top") +
@@ -241,7 +239,7 @@ reference
       
       v1 <- v + 
             geom_point(size = 4, pch = 21, aes(fill = site), alpha = .5) +
-            geom_smooth(method="lm", se = FALSE, size = 1, aes(colour = site))
+            geom_smooth(method="lm",size = 0.5,alpha = .2, se = FALSE, aes(colour = site))
 
       
       # --- sub plot efficiency versus generator size
@@ -262,7 +260,7 @@ reference
       
       g1 <- g + 
             geom_point(size = 4, pch = 21, aes(fill = site), alpha = .5) +
-            geom_smooth(method="lm", se = FALSE, size = 1, aes(colour = site))
+            geom_smooth(method="lm", se = FALSE, size = 0.5, aes(colour = site), alpha = .2)
       
       
       # --- sub plot efficiency versus rotor size 
@@ -283,7 +281,7 @@ reference
       
       r1 <- r + 
             geom_point(size = 4, pch = 21, aes(fill = site), alpha = .5) +
-            geom_smooth(method="lm", se = FALSE, size = 1, aes(colour = site))
+            geom_smooth(method="lm", se = FALSE, size = 0.5, aes(colour = site))
 
 ``` 
  
@@ -325,8 +323,8 @@ For each parameters, 4 graphics have been built, showing step by step how the mo
       
       # add fitted lines (deducted by the model mdl_1) to the "v" plot
       v2 <- v + 
-            geom_point(data =sub_selection_h[hub_height == 100], size = 4, pch = 21, aes(fill = site), alpha = .5)+
-            geom_point(data =sub_selection_h[hub_height != 100], size = 4, pch = 21, aes(fill = site), alpha = .1)
+            geom_point(data =sub_selection_h[hub_height == 100], size = 4, pch = 21, aes(fill = site), alpha = .6)+
+            geom_point(data =sub_selection_h[hub_height != 100], size = 4, pch = 21, aes(fill = site), alpha = .2)
       
       for(j in unique(wake2$label)){
             buff <- sub_selection_h[label == j & hub_height == 100]
@@ -334,6 +332,8 @@ For each parameters, 4 graphics have been built, showing step by step how the mo
             v2 <- v2 + stat_function(fun = mdl_1, 
                                    args = list( a = slope_vs, x1 = buff$wind_speed, y1 = buff$efficiency), 
                                    linetype = "dotted",
+                                   size = 0.3,
+                                   alpha = 0.3,
                                    xlim = c(sub_selection_h[label == j,min(wind_speed)],
                                             sub_selection_h[label == j,max(wind_speed)]))
       }
@@ -392,14 +392,16 @@ For each parameters, 4 graphics have been built, showing step by step how the mo
       
       # add fitted lines (deducted by the model mdl_1) to the "h" plot
       h2 <- h +     
-            geom_point(data =sub_selection_h[hub_height == 100], size = 4, pch = 21, aes(fill = site), alpha = .5)+
-            geom_point(data =sub_selection_h[hub_height != 100], size = 4, pch = 21, aes(fill = site), alpha = .1)
+            geom_point(data =sub_selection_h[hub_height == 100], size = 4, pch = 21, aes(fill = site), alpha = .6)+
+            geom_point(data =sub_selection_h[hub_height != 100], size = 4, pch = 21, aes(fill = site), alpha = .2)
       
             for(j in unique(wake2$label)){
                   buff <- sub_selection_h[label == j & hub_height == 100]
                   h2 <- h2 + stat_function(fun = mdl_1, 
-                                         args = list( a = slope_hs, x1 = buff$hub_height, y1 = buff$efficiency), 
-                                         linetype = "dotted")
+                                          args = list( a = slope_hs, x1 = buff$hub_height, y1 = buff$efficiency),
+                                          size = 0.3,
+                                          alpha = 0.3,
+                                          linetype = "dotted")
             }
       
       # --- test of the mdl_1 --> diffence from real values and extrapolated ones (using mdl_1)
@@ -457,14 +459,16 @@ For each parameters, 4 graphics have been built, showing step by step how the mo
       
       # add fitted lines (deducted by the model mdl_1) to the "r" plot
       r2 <- r +     
-            geom_point(data =sub_selection_r[rotor == 117], size = 4, pch = 21, aes(fill = site), alpha = .5)+
-            geom_point(data =sub_selection_r[rotor != 117], size = 4, pch = 21, aes(fill = site), alpha = .1)
+            geom_point(data =sub_selection_r[rotor == 117], size = 4, pch = 21, aes(fill = site), alpha = .6)+
+            geom_point(data =sub_selection_r[rotor != 117], size = 4, pch = 21, aes(fill = site), alpha = .2)
       
             for(j in unique(wake2$label)){
                   buff <- sub_selection_r[label == j & rotor == 117]
                   r2 <- r2 + stat_function(fun = mdl_1, 
-                                         args = list( a = slope_rs, x1 = buff$rotor, y1 = buff$efficiency), 
-                                         linetype = "dotted")
+                                          args = list( a = slope_rs, x1 = buff$rotor, y1 = buff$efficiency), 
+                                          size = 0.3,
+                                          alpha = 0.3,
+                                          linetype = "dotted")
             }
       
       # --- test of the mdl_1 --> diffence from real values and extrapolated ones (using mdl_1)
@@ -519,14 +523,17 @@ For each parameters, 4 graphics have been built, showing step by step how the mo
       
       # add fitted lines (deducted by the model mdl_1) to the "g" plot
       g2 <- g +
-            geom_point(data =sub_selection_g[generator == 3450], size = 4, pch = 21, aes(fill = site), alpha = .5)+
-            geom_point(data =sub_selection_g[generator != 3450], size = 4, pch = 21, aes(fill = site), alpha = .1)
+            geom_point(data =sub_selection_g[generator == 3450], size = 4, pch = 21, aes(fill = site), alpha = .6)+
+            geom_point(data =sub_selection_g[generator != 3450], size = 4, pch = 21, aes(fill = site), alpha = .2)
       
             for(j in unique(wake2$label)){
                   buff <- sub_selection_g[label == j & generator == 3450]
                   g2 <- g2 + stat_function(fun = mdl_1, 
-                                         args = list( a = slope_gs, x1 = buff$generator, y1 = buff$efficiency), 
-                                         linetype = "dotted")
+                                          args = list( a = slope_gs, x1 = buff$generator, y1 = buff$efficiency), 
+                                          linetype = "dotted",
+                                          size = 0.3,
+                                          alpha = 0.3)
+                                          
             }
             
       
@@ -562,13 +569,13 @@ For each parameters, 4 graphics have been built, showing step by step how the mo
 
 ```
   
-**Choose one of the four wind turbine characteristics to update the following plots:**
+
 ```{r echo = FALSE} 
 selectInput("parameters","", 
-choices = c("rotor", "generator", "hub_height", "wind_speed"),
+choices = c("Choose a parameter to update plots...","rotor", "generator", "hub_height", "wind_speed"),
  selectize=FALSE) 
 ``` 
-
+(plots might take some seconds to update)  
 Plot.1 shows the variation of efficiency along the considered parameter. For each pad a fitted line is plotted.
 ```{r echo = FALSE} 
 renderPlot({ 
@@ -611,8 +618,6 @@ renderPlot({
       if(d == "hub_height"){plot(h_res)}
       if(d == "wind_speed"){plot(v_res)}
 }, width = 600, height = 400)
-
-
 ```
 
 
@@ -627,7 +632,8 @@ It should be noted that wind speed and hub height are highly correlated.A change
 
 
 #### model_1 equation:
-$$ Eff_2 = A_x * (100 * Eff_1) * (X_2 - X_1) + Eff_1 $$
+
+$$Eff_2 = A_x * (100 * Eff_1) * (X_2 - X_1) + Eff_1$$
 
 $Eff_1$: reference efficiency [%]  
 $Eff_2$: target efficiency [%] (new configuration)  
@@ -801,8 +807,3 @@ ggplot(data = res[!grep(pattern = "^V",x = res$turbine),],
             axis.ticks.x = element_blank() ) +
       ylab("error [%]")
 ```
-
-<script type="text/x-mathjax-config">   
-   MathJax.Hub.Config({  "HTML-CSS": { minScaleAdjust: 125, availableFonts: [] }  });
-</script>
-
