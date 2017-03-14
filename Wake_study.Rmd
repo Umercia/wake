@@ -645,7 +645,7 @@ $A_x$: slope from the model (take a specific value for each parameter x). Accord
 * For wind speed $A_w$: `r round(slope_vs,4)` [s/m]
 
 
-## Model benchmark
+## Benchmark
 
 ```{r Benchmark_code, echo=FALSE, warning = FALSE, message = FALSE, cache = TRUE,results = "hide"} 
 
