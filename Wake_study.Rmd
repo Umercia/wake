@@ -312,7 +312,7 @@ For each parameters, 4 graphics have been built, showing step by step how the mo
       vs <- ggplot(df, aes(x,y))
       vs <- vs + geom_point(size = 4, pch = 21, aes(fill = site), alpha = .5) +
             geom_smooth(method="lm", se = FALSE, size = 1) +
-            geom_text(x = 92.5, y = 2.5, label = lm_eqn(df), parse = TRUE) +
+            geom_text(x = 92.5, y = 5, label = lm_eqn(df), parse = TRUE) +
             xlab("wake efficiency [%]") +
             ylab("slope [%.s/m]") +
             theme(legend.position="top")
@@ -381,7 +381,7 @@ For each parameters, 4 graphics have been built, showing step by step how the mo
       hs <- ggplot(df, aes(x,y))
       hs <- hs + geom_point(size = 4, pch = 21, aes(fill = site), alpha = .5) +
             geom_smooth(method="lm", se = FALSE, size = 1) +
-            geom_text(x = 92.5, y = 0.05, label = lm_eqn(df), parse = TRUE) +
+            geom_text(x = 92.5, y = 0.1, label = lm_eqn(df), parse = TRUE) +
             ylab("slope [%/m]") +
             xlab("wake efficiency [%]") +
             theme(legend.position="top")
@@ -448,7 +448,7 @@ For each parameters, 4 graphics have been built, showing step by step how the mo
       rs <- ggplot(df, aes(x,y))
       rs <- rs + geom_point(size = 4, pch = 21, aes(fill = site), alpha = .5) +
             geom_smooth(method="lm", se = FALSE, size = 1) +
-            geom_text(x = 90, y = -0.01, label = lm_eqn(df), parse = TRUE) +
+            geom_text(x = 92.5, y = 0.0, label = lm_eqn(df), parse = TRUE) +
             ylab("slope [%/m]") +
             xlab("wake efficiency [%]") +
             theme(legend.position="none")
@@ -512,7 +512,7 @@ For each parameters, 4 graphics have been built, showing step by step how the mo
       gs <- ggplot(df, aes(x,y))
       gs <- gs + geom_point(size = 4, pch = 21, aes(fill = site), alpha = .5) +
             geom_smooth(method="lm", se = FALSE, size = 1) +
-            geom_text(x = 92.5, y = 0.0, label = lm_eqn(df), parse = TRUE) +
+            geom_text(x = 85, y = 0.0, label = lm_eqn(df), parse = TRUE) +
             ylab("slope [%/m]") +
             xlab("wake efficiency [%]") +
             theme(legend.position="none")
