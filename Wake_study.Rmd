@@ -138,20 +138,20 @@ parsed_data[,hub_height := as.factor(hub_height)]
 ## Synopsis
 
 In this study we investigate the impact of wind turbine type (rotor size, generator size and hub height) on the wake efficiency. The overall idea is to build a simple model that could be able to predict(/correct) the wake effect of a specific configuration (turbine type) based on another "reference" configuration. It should be noted that it is a "macro" approach that does not go into the details of the wake model equations.
-4 turbine characteristics have been identified to have potentially an impact on the wake effect:
+4 turbine characteristics have been identified to potentially have an impact on the wake effect:
 
 * hub height
 * wind speed
 * rotor size
 * generator size
 
-To build this model, `r length(unique(wake2$site))` sites of 17 WTGs have been selected around Northern Europe countries. On each site,
-multiple configurations have been computed using Winpro 3.1 with the standard wake model (N.O Jense, WDC = 0.075). 
-To assess the impact of each parameters on wake efficiency, a reference configuration has been chosen (hub height + rotor + generator) and from this reference, each parameter has been tuned one by one (keeping the other constants).
+To build this model, `r length(unique(wake2$site))` sites of 17 WTGs have been selected across the Northern Europe countries. On each site,
+multiple configurations have been computed using winPRO 3.1 with the standard wake model (N.O Jense, WDC = 0.075). 
+To assess the impact of each parameters on wake efficiency, a reference configuration has been chosen (hub height + rotor + generator) and from this reference, each parameter has been tuned one by one (keeping the other constant).
 
 
 
-All inputs and script can be found on this link: [Data and R script](https://github.com/Umercia/wake)
+All inputs and the script can be found on this link: [Data and R script](https://github.com/Umercia/wake)
 
 
 ## Input Data & Processing
@@ -287,7 +287,7 @@ reference
  
 For each parameters, 4 graphics have been built, showing step by step how the model is build.
 
-1. vizualisation of the results
+1. visualisation of the results
 2. model construction
 3. test of the model
 4. comparison of the deviation with/without model
@@ -576,7 +576,7 @@ choices = c("Choose a parameter to update plots...","rotor", "generator", "hub_h
  selectize=FALSE) 
 ``` 
 (plots might take some seconds to update)  
-Plot.1 shows the variation of efficiency along the considered parameter. For each pad a fitted line is plotted.
+Plot 1 shows the variation of efficiency along the considered parameter. For each pad a fitted line is plotted.
 ```{r echo = FALSE} 
 renderPlot({ 
   d <- input$parameters
@@ -587,7 +587,7 @@ renderPlot({
 }, width = 600, height = 400)
 ```
 
-Plot.2 shows the variation of the fitted line slopes along efficiency. again, we will fit a line that would be used for our model.
+Plot 2 shows the variation of the fitted line slopes along efficiency. Again, we will fit a line that would be used for our model.
 ```{r echo = FALSE} 
 renderPlot({ 
   d <- input$parameters
@@ -598,7 +598,7 @@ renderPlot({
 }, width = 600, height = 400)
 ```
 
-Plot.3 shows the results of the model (dashed lines) using a reference point for each pad.
+Plot 3 shows the results of the model (dashed lines) using a reference point for each pad.
 ```{r echo = FALSE}
 renderPlot({ 
   d <- input$parameters
@@ -609,7 +609,7 @@ renderPlot({
 }, width = 600, height = 400)
 ```
 
-Plot.4 shows the comparison of not using any model (assuming efficiency constant) versus using the above model.
+Plot 4 shows the comparison of not using any model (assuming efficiency constant) versus using the above model.
 ```{r echo = FALSE}
 renderPlot({ 
   d <- input$parameters
@@ -628,7 +628,7 @@ From the graphs above:
 * Hub_height: Clear and relatively important impact on efficiency.
 * Wind speed: Clear and relatively important impact on efficiency. 
 
-It should be noted that wind speed and hub height are highly correlated.A change on the hub height will have off course an impact on the wind distribution. The core raison of the efficiency change might be more due to the change of wind distribution rather hub height. For the final model, We will chose to use a correction for wind speed and generator.
+It should be noted that wind speed and hub height are highly correlated. A change on the hub height will inevitably have an impact on the wind distribution. The core reason for the efficiency change is the wind speed change, whether this is due to a change in the input wind data or caused by a change in the hub height. For the final model, we will choose to use a correction for wind speed and generator.
 
 
 #### model_1 equation:
@@ -752,7 +752,7 @@ res <- melt(data = wake_test[,.(turbine,
 
 ```
 
-We will now benchmark the model on a new site with totally different configurations (no common parameters). Competitor turbines have also been included. The reference configuration is `r  reference[,unique(as.character(turbine))]`.
+We will now benchmark the model on a new site with very different configurations (no common parameters). Competitor turbines have also been included. The reference configuration is `r  reference[,unique(as.character(turbine))]`.
 
 
 ```{r parsed_data_test, echo=FALSE, warning = FALSE, message = FALSE, cache = TRUE,results = "hide"} 
