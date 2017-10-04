@@ -633,7 +633,7 @@ It should be noted that wind speed and hub height are highly correlated. A chang
 
 #### model_1 equation:
 
-$$Eff_2 = A_x * (100 * Eff_1) * (X_2 - X_1) + Eff_1$$
+$$Eff_2 = A_x * (100 - Eff_1) * (X_2 - X_1) + Eff_1$$
 
 $Eff_1$: reference efficiency [%]  
 $Eff_2$: target efficiency [%] (new configuration)  
